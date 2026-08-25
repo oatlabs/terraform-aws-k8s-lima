@@ -1,0 +1,44 @@
+name: Bug report
+description: Something behaved differently than documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant config.json
+      description: >
+        The cluster or node entry that reproduces it. Redact anything sensitive —
+        but note this module's config carries no credentials.
+      render: json
+
+  - type: input
+    id: module-version
+    attributes:
+      label: Module version
+      placeholder: v0.0.1
+    validations:
+      required: true
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Terraform and provider versions
+      description: Output of `terraform version`.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Terraform output
+      description: The plan or apply output, trimmed to the relevant part.
+      render: shell

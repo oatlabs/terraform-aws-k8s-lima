@@ -1,0 +1,48 @@
+name: setup
+description: Install just and the toolchain pinned in .tool-versions
+
+inputs:
+  terraform:
+    default: "false"
+  tflint:
+    default: "false"
+  terraform-docs:
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - id: versions
+      shell: bash
+      run: |
+        "$GITHUB_WORKSPACE/.github/tool-versions.sh" >> "$GITHUB_OUTPUT"
+
+    - shell: bash
+      env:
+        JUST_VERSION: ${{ steps.versions.outputs.JUST_VERSION }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/bin"
+        curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh \
+          | bash -s -- --tag "$JUST_VERSION" --to "$RUNNER_TEMP/bin"
+        echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+    - if: inputs.terraform == 'true'
+      uses: hashicorp/setup-terraform@v4
+      with:
+        terraform_version: ${{ steps.versions.outputs.TERRAFORM_VERSION }}
+        terraform_wrapper: false
+
+    - if: inputs.tflint == 'true'
+      uses: terraform-linters/setup-tflint@v6
+      with:
+        tflint_version: v${{ steps.versions.outputs.TFLINT_VERSION }}
+
+    - if: inputs.terraform-docs == 'true'
+      shell: bash
+      env:
+        VERSION: ${{ steps.versions.outputs.TERRAFORM_DOCS_VERSION }}
+      run: |
+        curl -sSLo /tmp/tfdocs.tar.gz \
+          "https://terraform-docs.io/dl/v${VERSION}/terraform-docs-v${VERSION}-linux-amd64.tar.gz"
+        tar -xzf /tmp/tfdocs.tar.gz -C /tmp terraform-docs
+        sudo install /tmp/terraform-docs /usr/local/bin/terraform-docs

@@ -1,0 +1,10 @@
+formatter: markdown
+
+# Zed (and some other viewers) render raw <a name="..."> anchor tags as literal
+# text, so disable them; terraform-docs still emits plain [name](link) markdown.
+settings:
+  anchor: false
+  # Report the version constraints the module declares, not whatever a local
+  # .terraform.lock.hcl happens to have resolved to — otherwise running
+  # `terraform init` here silently changes what gets generated.
+  lockfile: false

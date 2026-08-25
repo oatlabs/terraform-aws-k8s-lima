@@ -1,0 +1,75 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fmt:
+    name: fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          terraform: "true"
+      - run: just fmt-check
+
+  discover:
+    name: discover module dirs
+    runs-on: ubuntu-latest
+    outputs:
+      dirs: ${{ steps.find.outputs.dirs }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - id: find
+        run: |
+          dirs=$(just dirs | jq -R -s -c 'split("\n")[:-1]')
+          echo "dirs=$dirs" >> "$GITHUB_OUTPUT"
+          echo "Validating: $dirs"
+
+  validate:
+    name: validate ${{ matrix.dir }}
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: ${{ fromJson(needs.discover.outputs.dirs) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          terraform: "true"
+      - run: just validate-dir '${{ matrix.dir }}'
+
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          tflint: "true"
+      - run: just lint
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  docs:
+    name: docs in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          terraform-docs: "true"
+      - run: just docs-check

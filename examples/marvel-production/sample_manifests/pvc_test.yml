@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-test
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: ebs-gp3
+  resources:
+    requests:
+      storage: 4Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ebs-test
+spec:
+  containers:
+    - name: app
+      image: public.ecr.aws/docker/library/busybox:1.36
+      command: ["sh", "-c", "echo hello-ebs > /data/test.txt && sleep 3600"]
+      volumeMounts:
+        - name: vol
+          mountPath: /data
+  volumes:
+    - name: vol
+      persistentVolumeClaim:
+        claimName: ebs-test

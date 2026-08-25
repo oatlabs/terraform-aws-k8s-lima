@@ -1,0 +1,9 @@
+# Accepted Trivy config findings, one per line as a check ID.
+#
+# Deliberately empty. Trivy has never run against this repo, so anything written
+# here now would be a guess. Run the security workflow once, read the real
+# findings, fix whatever is genuinely wrong, and record only the rest here —
+# each with a comment saying why it is acceptable for this module.
+#
+# Format:
+#   AVD-AWS-0053  # ELB has no access logs: cluster API traffic only, no audit need

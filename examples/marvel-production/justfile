@@ -1,0 +1,16 @@
+set dotenv-load := true # supply AWS_* variables for authentication.
+
+kubeconfig_dir := justfile_directory() / ".kube"
+talosconfig_dir := justfile_directory() / ".talos"
+
+apply:
+    terraform init
+    terraform apply -auto-approve
+
+destroy:
+    terraform destroy
+
+fetch-config cluster:
+    mkdir -p {{kubeconfig_dir}} {{talosconfig_dir}}
+    terraform output -json kubeconfig  | jq -er '."{{cluster}}"' > {{kubeconfig_dir}}/{{cluster}}.config
+    terraform output -json talosconfig | jq -er '."{{cluster}}"' > {{talosconfig_dir}}/{{cluster}}.config

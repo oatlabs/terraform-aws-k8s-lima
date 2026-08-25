@@ -1,0 +1,80 @@
+{
+  "schema_version": "0.1",
+  "organization": "Marvel",
+  "talos_version": "v1.13.8",
+  "kubernetes_version": "1.36.2",
+  "k8s_clusters": {
+    "us-west-2-aws-marvel-dataplane": {
+      "region": "us-west-2",
+      "vpc_cidr": "172.16.0.0/16",
+      "subnets": {
+        "us-west-1a": "172.16.0.0/20",
+        "us-west-1c": "172.16.16.0/20"
+      },
+      "k8s_control_plane": {
+        "node-0": {
+          "instance_type": "c7i-flex.large",
+          "root_volume_size": 30,
+          "monitoring": false,
+          "availability_zone": "us-west-2a"
+        }
+      },
+      "k8s_workers": {
+        "node-0": {
+          "instance_type": "c7i-flex.large",
+          "root_volume_size": 30,
+          "monitoring": false,
+          "availability_zone": "us-west-2a",
+          "roles": [
+            "general"
+          ]
+        },
+        "node-1": {
+          "instance_type": "c7i-flex.large",
+          "root_volume_size": 30,
+          "monitoring": false,
+          "availability_zone": "us-west-2a",
+          "registration_taints": [
+            {
+              "key": "node-role.kubernetes.io/postgres",
+              "effect": "NoSchedule"
+            }
+          ],
+          "roles": [
+            "postgres"
+          ]
+        },
+        "node-2": {
+          "instance_type": "c7i-flex.large",
+          "root_volume_size": 30,
+          "monitoring": false,
+          "availability_zone": "us-west-2b",
+          "registration_taints": [
+            {
+              "key": "node-role.kubernetes.io/postgres",
+              "effect": "NoSchedule"
+            }
+          ],
+          "roles": [
+            "postgres"
+          ]
+        },
+        "node-3": {
+          "instance_type": "c7i-flex.large",
+          "root_volume_size": 30,
+          "monitoring": false,
+          "availability_zone": "us-west-2c",
+          "registration_taints": [
+            {
+              "key": "node-role.kubernetes.io/postgres",
+              "effect": "NoSchedule"
+            }
+          ],
+          "roles": [
+            "postgres"
+          ]
+        }
+      }
+    }
+  }
+}
