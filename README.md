@@ -8,12 +8,13 @@
 
 ### Minimal feature set
 
-1. Own the control plane
+1. Own the control plane.
 2. Declarative approach to scaling nodes.
-3. Out of the box plumbing:
-  - EBS for supporting volume claims
-  - CCM for node labels (zone and region topology keys, IAM permissions, etc)
-  - NLB for supporting Load Balancer Services 
+3. Out of the box plumbing for -
+  - EBS Storage class to support persistent volume claims.
+  - CCM to create node labels (zone and region topology keys) and configure IAM permissions.
+  - NLB for supporting Load Balancer services.
+  - NetworkPolicy CRDs enabled in Flannel CNI.
 
 ## Requirements
 
