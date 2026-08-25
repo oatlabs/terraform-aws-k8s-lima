@@ -22,6 +22,9 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      # upload-sarif resolves the workflow run to build its analysis key;
+      # that API is gated behind actions:read on private repos.
+      actions: read
     steps:
       - uses: actions/checkout@v7
 

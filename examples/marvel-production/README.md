@@ -7,19 +7,19 @@ Step 1: Bootstrap the Kubernetes infrastructure on AWS for all clusters in `conf
 just apply
 ```
 
-Step 2: Fetch Kubernetes and Talos credentials for the us-west-1-aws-marvel-dataplane cluster from terraform state and save them to `.kube/` and `.talos/` respectively.
+Step 2: Fetch Kubernetes and Talos credentials for the us-west-2-aws-marvel-dataplane cluster from terraform state and save them to `.kube/` and `.talos/` respectively.
 ```sh
-just fetch-config us-west-1-aws-marvel-dataplane
+just fetch-config us-west-2-aws-marvel-dataplane
 ```
 
 Step 3: Now you are ready to deploy apps with `kubectl` with the below configuration.
 ```bash
-export KUBECONFIG=.kube/us-west-1-aws-marvel-dataplane.config
+export KUBECONFIG=.kube/us-west-2-aws-marvel-dataplane.config
 ```
 
 Step 4: To use `talosctl` for cluster administration
 ```bash
-export TALOSCONFIG=.talos/us-west-1-aws-marvel-dataplane.config
+export TALOSCONFIG=.talos/us-west-2-aws-marvel-dataplane.config
 ```
 
 # FAQ
@@ -42,7 +42,7 @@ any labels you want. Then run `just apply`.
   "instance_type": "c7i-flex.large",
   "root_volume_size": 30,
   "monitoring": false,
-  "availability_zone": "us-west-1a",
+  "availability_zone": "us-west-2a",
   "registration_taints": [
     { "key": "node-role.kubernetes.io/postgres", "effect": "NoSchedule" }
   ],
@@ -71,7 +71,7 @@ any apply.
   "instance_type": "c7i-flex.large",
   "root_volume_size": 30,
   "monitoring": false,
-  "availability_zone": "us-west-1c",
+  "availability_zone": "us-west-2c",
   "runtime_taints": [
     { "key": "oatlabs.oatmilk.work/workload", "value": "ingress", "effect": "NoSchedule" }
   ],
