@@ -4,38 +4,44 @@
 [![CI](https://github.com/oatlabs/terraform-aws-k8s-lima/actions/workflows/ci.yml/badge.svg)](https://github.com/oatlabs/terraform-aws-k8s-lima/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-**The internet's most wanted and missing Kubernetes edition.**
 
 ### Minimal feature set
-
-1. Own the control plane.
-2. Declarative approach to scaling nodes.
-3. Out of the box plumbing for -
-  - EBS Storage class to support persistent volume claims.
-  - CCM to create node labels (zone and region topology keys) and configure IAM permissions.
-  - NLB for supporting Load Balancer services.
-  - NetworkPolicy CRDs enabled in Flannel CNI.
+- Not EKS, you own the control plane. 
+- No auto scaling groups, use JSON file to add nodes.
+- EBS connection to allocate Persistent Volumes.
+- CCM for Load Balancers requests.
+- Flannel CNI for NetworkPolicy support.
 
 ## Requirements
-
 Terraform >= 1.9, AWS credentials that can create VPC, EC2, IAM and ELB resources, and
 `bash`, `kubectl` and `helm` on the machine running. 
 
 ## Usage
-
 ```hcl
-module "cluster" {
+module "marvel" {
   source  = "oatlabs/k8s-lima/aws"
   version = "0.0.1"
 
   config = file("path/to/local/config.json")
 }
+
+output "talosconfig" {
+  value       = module.marvel.talosconfig
+  sensitive   = true
+}
+
+output "kubeconfig" {
+  value       = module.marvel.kubeconfig
+  sensitive   = true
+}
 ```
+Sample [config.json](https://github.com/oatlabs/terraform-aws-k8s-lima/blob/main/examples/marvel-production/config.json) can be found here. It's part of a fully working [example](https://github.com/oatlabs/terraform-aws-k8s-lima/blob/main/examples/marvel-production).
 
-See a full working [example](examples/marvel-production/README.md).
+Until version `0.1.0` is reached, expect less stability as the `config` schema may change anytime. To be safe, pin the version to `0.0.x` for now.
 
-Until 0.1.0 is reched, pin the version exactly while the module is on `0.0.x` - the `config` schema may change in
-any release, a patch included.
+## Credits
+
+**Powered by Talos Linux**
 
 ## License
 
