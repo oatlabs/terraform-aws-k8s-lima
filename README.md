@@ -1,4 +1,4 @@
-# Kubernetes Lima Edition
+# Kubernetes Lima Edition (Talos Linux)
 
 [![Terraform Registry](https://img.shields.io/badge/terraform-registry-844FBA?logo=terraform&logoColor=white)](https://registry.terraform.io/modules/oatlabs/k8s-lima/aws/latest)
 [![CI](https://github.com/oatlabs/terraform-aws-k8s-lima/actions/workflows/ci.yml/badge.svg)](https://github.com/oatlabs/terraform-aws-k8s-lima/actions/workflows/ci.yml)
