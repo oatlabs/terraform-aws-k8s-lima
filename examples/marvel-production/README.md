@@ -28,34 +28,6 @@ export TALOSCONFIG=.talos/us-west-2-aws-marvel-dataplane.config
 
 Add a cluster entry and fill up the nodes in `config.json`, then run `just apply`.
 
-The key you give it must be unique within the `namespace`, not within the whole AWS account —
-see below.
-
-## Run the same clusters in staging and production
-
-`namespace` is a top-level key in `config.json` naming the environment this deployment is —
-`staging`, `production`, and so on. It is what lets one AWS account hold more than one of them.
-
-Every name AWS or Talos sees is `<namespace>-<cluster key>`: the hashed slug that names the VPC,
-both security groups, the API load balancer and the IAM policies, the Talos cluster name, and
-the `kubernetes.io/cluster/<name>` tag each CCM matches on. So a staging deployment and a
-production one can declare the same cluster key — same regions, same node layout, same file
-give or take instance sizes — and neither will collide with or claim the other's resources.
-
-The namespace stops at that boundary. The `kubeconfigs` and `talosconfigs` outputs are keyed by
-the bare cluster key, so `just fetch-config` takes the name as written in `config.json`:
-
-```sh
-just fetch-config us-west-2-aws-marvel-dataplane
-```
-
-**Changing `namespace` on a running deployment is a rebuild, not a rename.** It changes every
-resource name, and `name` is ForceNew on both `aws_elb` and `aws_security_group`, so the plan
-replaces the API load balancer and both security groups — which moves the Kubernetes API
-endpoint and rewrites every node's machine configuration. Promote by deploying, not by editing
-this field. `organization` carries no such weight; it is only a tag value, and editing it
-re-tags in place.
-
 ## Add capacity units to existing cluster
 
 Add a node entry to an existig cluster in `config.json`, then run `just apply`.
