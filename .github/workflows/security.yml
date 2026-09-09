@@ -39,6 +39,7 @@ jobs:
           output: trivy.sarif
           exit-code: "0"
           trivyignores: .trivyignore
+          skip-dirs: examples/marvel-production/sample_manifests
 
       - name: Upload to code scanning
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
@@ -56,3 +57,4 @@ jobs:
           exit-code: "1"
           severity: HIGH,CRITICAL
           trivyignores: .trivyignore
+          skip-dirs: examples/marvel-production/sample_manifests

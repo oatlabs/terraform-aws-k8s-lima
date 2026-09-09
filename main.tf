@@ -2,13 +2,14 @@ locals {
   config = jsondecode(var.config)
 
   organization       = local.config["organization"]
+  namespace          = local.config["namespace"]
   k8s_clusters       = local.config["k8s_clusters"]
   talos_version      = local.config["talos_version"]
   kubernetes_version = local.config["kubernetes_version"]
 
   names = { for name in keys(local.k8s_clusters) : name => {
-    aws   = substr(uuidv5("oid", name), 0, 32)
-    talos = name
+    aws   = substr(uuidv5("oid", "${local.namespace}/${name}"), 0, 32)
+    talos = "${local.namespace}-${name}"
   } }
 
   # `talos` not `aws`: the CCM matches this key against the Talos cluster name.
@@ -18,6 +19,7 @@ locals {
 
   common_tags = {
     Organization = local.organization
+    Namespace    = local.namespace
     Provisioner  = "Terraform"
     Platform     = "OatLabs"
   }

@@ -25,17 +25,23 @@ module "marvel" {
   config = file("path/to/local/config.json")
 }
 
-output "talosconfig" {
-  value       = module.marvel.talosconfig
+output "talosconfigs" {
+  value       = module.marvel.talosconfigs
   sensitive   = true
 }
 
-output "kubeconfig" {
-  value       = module.marvel.kubeconfig
+output "kubeconfigs" {
+  value       = module.marvel.kubeconfigs
   sensitive   = true
 }
 ```
 Sample [config.json](https://github.com/oatlabs/terraform-aws-k8s-lima/blob/main/examples/marvel-production/config.json) can be found here. It's part of a fully working [example](https://github.com/oatlabs/terraform-aws-k8s-lima/blob/main/examples/marvel-production).
+
+`config.json` declares a top-level `namespace` — the environment this deployment is, such as
+`staging` or `production` — and every name AWS and Talos see is `<namespace>-<cluster key>`.
+Cluster keys therefore need to be unique only within their namespace, so one AWS account can
+hold several environments with the same clusters in each. The two outputs are keyed by the bare
+cluster key, without the namespace.
 
 Until version `0.1.0` is reached, expect less stability as the `config` schema may change anytime. To be safe, pin the version to `0.0.x` for now.
 

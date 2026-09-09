@@ -3,15 +3,15 @@ module "marvel" {
   config = file("${path.module}/config.json")
 }
 
-output "talosconfig" {
-  description = "The generated talosconfig, per cluster."
-  value       = module.marvel.talosconfig
+output "talosconfigs" {
+  description = "The generated talosconfig, per cluster, keyed by its config.json key."
+  value       = module.marvel.talosconfigs
   sensitive   = true
 }
 
-output "kubeconfig" {
-  description = "The generated kubeconfig, per cluster."
-  value       = module.marvel.kubeconfig
+output "kubeconfigs" {
+  description = "The generated kubeconfig, per cluster, keyed by its config.json key."
+  value       = module.marvel.kubeconfigs
   sensitive   = true
 }
 
