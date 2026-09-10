@@ -60,6 +60,8 @@ resource "aws_iam_policy" "control_plane" {
             "elasticloadbalancing:DescribeListeners",
             "elasticloadbalancing:DescribeLoadBalancerPolicies",
             "elasticloadbalancing:DescribeTargetGroups",
+            "elasticloadbalancing:DescribeTargetGroupAttributes",
+            "elasticloadbalancing:ModifyTargetGroupAttributes",
             "elasticloadbalancing:DescribeTargetHealth",
             "elasticloadbalancing:ModifyListener",
             "elasticloadbalancing:ModifyTargetGroup",
