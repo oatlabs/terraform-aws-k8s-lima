@@ -74,6 +74,10 @@ module "cluster_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 6.0"
 
+  # The cloud controller manager attaches its own ingress rules to this group
+  # for LoadBalancer Services. Exclusive rules would delete them on every apply.
+  enable_exclusive_rules = false
+
   region      = var.region
   name        = var.name
   description = "Allow all intra-cluster and egress traffic"
@@ -108,6 +112,8 @@ module "cluster_sg" {
 module "kubernetes_api_sg" {
   source  = "terraform-aws-modules/security-group/aws//modules/https-443"
   version = "~> 6.0"
+
+  enable_exclusive_rules = false
 
   region      = var.region
   name        = "${var.name}-k8s-api"
