@@ -10,7 +10,7 @@
 - No auto scaling groups, use JSON file to add nodes.
 - EBS connection to allocate Persistent Volumes.
 - CCM for Load Balancers requests.
-- Flannel CNI for NetworkPolicy support.
+- Flannel CNI with Talos policy enforcer for NetworkPolicy support.
 
 ## Requirements
 Terraform >= 1.9, AWS credentials that can create VPC, EC2, IAM and ELB resources, and
